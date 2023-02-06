@@ -3,6 +3,12 @@ const crypto = require('crypto');
 const fsUtils = require('./fsUtils');
 
 const validateLogin = require('./middlewares/validateLogin');
+const validateToken = require('./middlewares/validateToken');
+const { validateAge,
+  validateTalk,
+  validateName,
+  validateWatchedAt,
+  validateRate } = require('./middlewares/validateTalker');
 
 const app = express();
 app.use(express.json());
@@ -37,6 +43,20 @@ app.post('/login', validateLogin, async (req, res) => {
   const token = crypto.randomBytes(16).toString('hex').slice(0, 16);
   const newLogin = { email, password };
   return res.status(200).json({ newLogin, token });
+});
+
+app.post('/talker',
+  validateToken,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateWatchedAt,
+  validateRate, async (req, res) => {
+  const talkers = await fsUtils.readTalkers();
+  const lastId = talkers[talkers.length - 1];
+  const newTalker = { id: lastId + 1, ...req.body };
+  talkers.push(newTalker);
+  res.status(201).json(newTalker);
 });
 
 app.listen(PORT, () => {
