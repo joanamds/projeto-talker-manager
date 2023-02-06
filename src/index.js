@@ -2,6 +2,8 @@ const express = require('express');
 const crypto = require('crypto');
 const fsUtils = require('./fsUtils');
 
+const validateLogin = require('./middlewares/validateLogin');
+
 const app = express();
 app.use(express.json());
 
@@ -30,7 +32,7 @@ app.get('/talker/:id', async (req, res) => {
   return res.status(404).send({ message: 'Pessoa palestrante não encontrada' });
 });
 
-app.post('/login', async (req, res) => {
+app.post('/login', validateLogin, async (req, res) => {
   const { email, password } = req.body;
   const token = crypto.randomBytes(16).toString('hex').slice(0, 16);
   const newLogin = { email, password };
