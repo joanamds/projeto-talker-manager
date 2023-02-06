@@ -53,10 +53,10 @@ app.post('/talker',
   validateWatchedAt,
   validateRate, async (req, res) => {
   const talkers = await fsUtils.readTalkers();
-  const lastId = talkers[talkers.length - 1];
+  const lastId = talkers.length;
   const newTalker = { id: lastId + 1, ...req.body };
   talkers.push(newTalker);
-  res.status(201).json(newTalker);
+  res.status(201).json(talkers);
 });
 
 app.listen(PORT, () => {

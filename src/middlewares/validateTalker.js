@@ -34,10 +34,10 @@ async function validateWatchedAt(req, res, next) {
   const { watchedAt } = talk;
 
   if (!watchedAt) {
-    res.status(400).json({ message: 'O campo "watchedAt" é obrigatório' });
+    return res.status(400).json({ message: 'O campo "watchedAt" é obrigatório' });
   }
   if (!dateRegex.test(watchedAt)) {
-    res.status(400).json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
+    return res.status(400).json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
   }
   return next();
 }
@@ -47,10 +47,10 @@ async function validateRate(req, res, next) {
   const { rate } = talk;
 
   if (!rate) {
-    res.status(400).json({ message: 'O campo "rate" é obrigatório' });
+    return res.status(400).json({ message: 'O campo "rate" é obrigatório' });
   }
-  if (rate > 5 && rate % 1 !== 0) {
-    res.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
+  if (rate > 5 && rate % 1 !== 0 && rate === 0) {
+    return res.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
   }
   return next();
 }
@@ -58,7 +58,7 @@ async function validateRate(req, res, next) {
 async function validateTalk(req, res, next) {
   const { talk } = req.body;
   if (!talk) {
-    res.status(400).json({ message: 'O campo "talk" é obrigatório' });
+    return res.status(400).json({ message: 'O campo "talk" é obrigatório' });
   }
   return next();
 }
