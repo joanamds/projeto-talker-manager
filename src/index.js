@@ -77,7 +77,15 @@ app.put('/talker/:id', validateToken,
     talkers.splice(index, 1, updatedTalker);
     await fsUtils.writeTalkers(talkers);
     res.status(200).send(updatedTalker);
-  });
+});
+  
+app.delete('/talker/:id', validateToken, async (req, res) => {
+  const talkerId = Number(req.params.id);
+  const talkers = await fsUtils.readTalkers();
+  const updatedTalkers = talkers.filter((talker) => talker.id !== talkerId);
+  await fsUtils.writeTalkers(updatedTalkers);
+  res.sendStatus(204);
+});
 
 app.listen(PORT, () => {
   console.log('Online');
