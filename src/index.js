@@ -62,6 +62,23 @@ app.post('/talker',
   res.status(201).json(newTalker);
 });
 
+app.put('/talker/:id', validateToken,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateWatchedAt,
+  validateRate,
+  validateNumber, async (req, res) => {
+    const talkerId = Number(req.params.id);
+    const editedTalker = req.body;
+    const talkers = await fsUtils.readTalkers();
+    const index = talkers.findIndex((talker) => talker.id === talkerId);
+    const updatedTalker = { id: talkerId, ...editedTalker };
+    talkers.splice(index, 1, updatedTalker);
+    await fsUtils.writeTalkers(talkers);
+    res.status(200).send(updatedTalker);
+  });
+
 app.listen(PORT, () => {
   console.log('Online');
 });
