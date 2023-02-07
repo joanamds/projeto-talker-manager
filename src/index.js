@@ -8,7 +8,8 @@ const { validateAge,
   validateTalk,
   validateName,
   validateWatchedAt,
-  validateRate } = require('./middlewares/validateTalker');
+  validateRate,
+  validateNumber } = require('./middlewares/validateTalker');
 
 const app = express();
 app.use(express.json());
@@ -51,12 +52,14 @@ app.post('/talker',
   validateAge,
   validateTalk,
   validateWatchedAt,
-  validateRate, async (req, res) => {
-  const talkers = await fsUtils.readTalkers();
-  const lastId = talkers.length;
-  const newTalker = { id: lastId + 1, ...req.body };
-  talkers.push(newTalker);
-  res.status(201).json(talkers);
+  validateRate,
+  validateNumber, async (req, res) => {
+    const talkers = await fsUtils.readTalkers();
+    const lastId = talkers.length;
+    const newTalker = { id: lastId + 1, ...req.body };
+    talkers.push(newTalker);
+    await fsUtils.writeTalkers(talkers);
+  res.status(201).json(newTalker);
 });
 
 app.listen(PORT, () => {

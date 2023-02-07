@@ -1,4 +1,4 @@
-async function validateName(req, res, next) {
+const validateName = async (req, res, next) => {
   const { name } = req.body;
 
   if (!name) {
@@ -8,9 +8,9 @@ async function validateName(req, res, next) {
     return res.status(400).json({ message: 'O "name" deve ter pelo menos 3 caracteres' });
   }
   return next();
-}
+};
 
-async function validateAge(req, res, next) {
+const validateAge = async (req, res, next) => {
   const { age } = req.body;
   if (!age) {
     return res.status(400).json({ message: 'O campo "age" é obrigatório' });
@@ -25,11 +25,11 @@ async function validateAge(req, res, next) {
     return res.status(400).json({ message: 'A pessoa palestrante deve ser maior de idade' });
   }
   return next();
-}
+};
 
 const dateRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/[0-9]{4}$/;
 
-async function validateWatchedAt(req, res, next) {
+const validateWatchedAt = async (req, res, next) => {
   const { talk } = req.body;
   const { watchedAt } = talk;
 
@@ -40,33 +40,41 @@ async function validateWatchedAt(req, res, next) {
     return res.status(400).json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
   }
   return next();
-}
+};
 
-async function validateRate(req, res, next) {
+const validateRate = async (req, res, next) => {
   const { talk } = req.body;
   const { rate } = talk;
 
-  if (!rate) {
+  if (rate === undefined) {
     return res.status(400).json({ message: 'O campo "rate" é obrigatório' });
   }
-  if (rate > 5 && rate % 1 !== 0 && rate === 0) {
+  next();
+};
+
+const validateNumber = async (req, res, next) => {
+  const { talk } = req.body;
+  const { rate } = talk;
+
+  if (rate < 1 || rate > 5 || !Number.isInteger(rate)) {
     return res.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
   }
-  return next();
-}
+  next();
+};
 
-async function validateTalk(req, res, next) {
+const validateTalk = async (req, res, next) => {
   const { talk } = req.body;
   if (!talk) {
     return res.status(400).json({ message: 'O campo "talk" é obrigatório' });
   }
   return next();
-}
+};
 
 module.exports = {
   validateName,
   validateAge,
   validateWatchedAt,
   validateRate,
+  validateNumber,
   validateTalk,
 };

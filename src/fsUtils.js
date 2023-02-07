@@ -16,7 +16,13 @@ const readTalkersById = async (id) => {
   return getById;
 };
 
+const writeTalkers = async (talkers) => {
+  const newTalkers = await fs.writeFile(filePath, JSON.stringify(talkers));
+  return newTalkers;
+};
+
 module.exports = {
   readTalkers,
   readTalkersById,
+  writeTalkers,
 };
