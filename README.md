@@ -8,7 +8,7 @@ Este projeto foi o primeiro projeto utilizando Node.js em que foi preciso constr
 
 ## Tecnologias usadas
 Back-end:
-> Desenvolvido usando: Docker, docker-compose, Node.js
+> Desenvolvido usando: Docker, docker-compose, Node.js, Express
 
 ## Instalando Dependências
 ### Com Docker
